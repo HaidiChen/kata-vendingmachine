@@ -41,7 +41,7 @@ public class VendingMachine {
     requestedItem = itemList.get(itemName);
     if (hasEnoughMoneyAndItemInStock()) {
       chargeAndDecreaseStock();
-      return remainingChange;
+      return refund();
     }
     else if (itemStockIsEmpty()) {
       throw new StockEmpty("All " + itemName + " sold out");

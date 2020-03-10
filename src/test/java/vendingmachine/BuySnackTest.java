@@ -35,10 +35,11 @@ public class BuySnackTest {
 
   @DisplayName("Snack costs 50 pence")
   @Test
-  void returnChangesIfAnyAfterGettingSnack() 
+  void returnChangesIfAnyAfterGettingSnackAndSetRemainingChangeToZero() 
     throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
     machine.takeCoin(50);
     assertEquals(50-50, machine.popItem("Snack"));
+    assertEquals(0, machine.getRemainingChange());
   }
 
   @DisplayName("Cannot buy when Snack sold out")

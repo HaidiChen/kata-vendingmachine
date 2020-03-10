@@ -37,11 +37,12 @@ public class BuyNutsTest {
 
   @DisplayName("Nuts costs 75 pence")
   @Test
-  void returnChangesIfAnyAfterGettingNuts() 
+  void returnChangesIfAnyAfterGettingNutsAndSetRemainingChangeToZero() 
     throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
     machine.takeCoin(50);
     machine.takeCoin(50);
     assertEquals(50+50-75, machine.popItem("Nuts"));
+    assertEquals(0, machine.getRemainingChange());
   }
 
   @DisplayName("Cannot buy when Nuts sold out")
