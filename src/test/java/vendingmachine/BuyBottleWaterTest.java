@@ -51,6 +51,12 @@ public class BuyBottleWaterTest {
   }
 
   @Test
+  void resetBottleWaterStockToFive() {
+    machine.resetItemStock("BottleWater", 5);
+    assertEquals(5, machine.getItemStock("BottleWater"));
+  }
+
+  @Test
   void stockIsEmptyWhenSoldOut() 
     throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
     machine.resetItemStock("BottleWater", 2);
