@@ -23,7 +23,7 @@ public class CoinsTest {
     items.put("Coke", new Item("Coke", 150, 10));
     items.put("BottleWater", new Item("BottleWater", 100, 10));
 
-    coins = new PenceCoins();
+    coins = PenceCoins.getInstance();
     machine = new VendingMachine(coins, items);
   }
 

@@ -19,7 +19,7 @@ public class BuyNutsTest {
     items = new HashMap<String, Item>();
     items.put("Nuts", new Item("Nuts", 75, 10));
 
-    coins = new PenceCoins();
+    coins = PenceCoins.getInstance();
     machine = new VendingMachine(coins, items);
   }
 
