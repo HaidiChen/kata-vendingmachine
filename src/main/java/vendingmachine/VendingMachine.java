@@ -1,17 +1,13 @@
 package vendingmachine;
 
-import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.ArrayList;
 
 public class VendingMachine {
 
   private Coins coins;
   private Map<String, Item> itemList;
-  private Map<String, Integer> items;
-  private Map<String, Integer> itemsStock;
-  private int totalValue = 0;
+  private int remainingChange = 0;
 
   public VendingMachine(Coins coins, Map<String, Item> itemList) {
     this.coins = coins;
@@ -19,32 +15,51 @@ public class VendingMachine {
   }
 
   public boolean takeCoin(int pence) {
-    if (coins.hasValue(pence)) {
-      totalValue += pence;
+    if (acceptCoinValue(pence)) {
+      remainingChange += pence;
       return true;
     }
     return false;
   }
 
-  public int getTotalValue() {
-    return totalValue;
+  private boolean acceptCoinValue(int coinValue) {
+    return coins.hasValue(coinValue);
+  }
+
+  public int getRemainingChange() {
+    return remainingChange;
   }
 
   public void refund() {
-    totalValue = 0;
+    remainingChange = 0;
   }
 
-  public boolean popItem(String itemName) {
+  public int popItem(String itemName) throws NotEnoughMoney, StockEmpty {
     Item item = itemList.get(itemName);
-    int itemPrice = item.getPrice();
-    int stock = item.getStock();
-    if (totalValue >= itemPrice && stock > 0) {
-      totalValue -= itemPrice;
-      stock -= 1;
-      item.setStock(stock);
-      return true;
+    if (hasEnoughMoneyAndItemInStock(item)) {
+      chargeAndDecreaseStock(item);
+      return remainingChange;
     }
-    return false;
+    else if (ItemStockIsEmpty(item)) {
+      throw new StockEmpty("All " + itemName + " sold out");
+    }
+    else {
+      throw new NotEnoughMoney("Not enough money, need " + 
+          (item.getPrice() - remainingChange) + " pence more");
+    }
+  }
+
+  private boolean ItemStockIsEmpty(Item item) {
+    return item.getStock() == 0;
+  }
+
+  private boolean hasEnoughMoneyAndItemInStock(Item item) {
+    return remainingChange >= item.getPrice() && item.getStock() > 0;
+  }
+
+  private void chargeAndDecreaseStock(Item item) {
+    remainingChange -= item.getPrice();
+    item.setStock(item.getStock() - 1);
   }
 
   public void resetStock(int stockNumber) {
@@ -53,13 +68,24 @@ public class VendingMachine {
     }
   }
 
-  public boolean isEmpty() {
-    for (Item item: itemList.values()) {
-      if (item.getStock() == 0) {
-        return true;
-      }
-    }
-    return false;
+  public boolean isItemEmpty(String itemName) {
+    Item item = itemList.get(itemName);
+    return item.getStock() == 0;
   }
 
+  public class NotEnoughMoney extends Exception {
+    
+    public NotEnoughMoney(String s) {
+      super(s);
+    }
+
+  }
+
+  public class StockEmpty extends Exception {
+    
+    public StockEmpty(String s) {
+      super(s);
+    }
+
+  }
 }

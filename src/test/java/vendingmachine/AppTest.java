@@ -51,185 +51,156 @@ class AppTest {
   }
 
   @Test
-  void calculateTotalValueOfValidCoinsTakenByMachine() {
+  void calculateRemainingChangeOfValidCoinsTakenByMachine() {
     machine.takeCoin(1);
     machine.takeCoin(1);
     machine.takeCoin(20);
-    assertEquals(22, machine.getTotalValue());
+    assertEquals(22, machine.getRemainingChange());
   }
 
   @Test
-  void calculateTotalValueOfInvalidCoinsTakenByMachine() {
+  void calculateRemainingChangeOfInvalidCoinsTakenByMachine() {
     machine.takeCoin(2);
     machine.takeCoin(10);
     machine.takeCoin(15);
     machine.takeCoin(30);
-    assertEquals(0, machine.getTotalValue());
+    assertEquals(0, machine.getRemainingChange());
   }
 
   @Test
-  void calculateTotalValueOfValidAndInvalidCoinsTakenByMachine() {
+  void calculateRemainingChangeOfValidAndInvalidCoinsTakenByMachine() {
     machine.takeCoin(50);
     machine.takeCoin(90);
     machine.takeCoin(100);
-    assertEquals(150, machine.getTotalValue());
+    assertEquals(150, machine.getRemainingChange());
   }
 
   @Test
-  void refundMakesMachineHasZeroTotalValue() {
+  void refundClearsRemainingChange() {
     machine.takeCoin(50);
     machine.refund();
-    assertEquals(0, machine.getTotalValue());
+    assertEquals(0, machine.getRemainingChange());
   }
 
-  @DisplayName("Failed to buy Candy when money is not enough")
+  @DisplayName("Not Enough Money to buy Candy")
   @Test
-  void getCandyWhenTotalValueIsLessThanTenPenceWillFail() {
+  void buyCandyWithoutEnoughMoneyWillThrowAnException() {
     machine.takeCoin(1);
     machine.takeCoin(1);
     machine.takeCoin(1);
     machine.takeCoin(1);
     machine.takeCoin(5);
-    assertFalse(machine.popItem("Candy"));
+    testNotEnoughMoneyException("Candy");
   }
 
-  @DisplayName("Successfully bought Candy when money is enough")
-  @Test
-  void getCandyWhenTotalValueIsNotLessThanTenPenceWillSucceed() {
-    machine.takeCoin(5);
-    machine.takeCoin(5);
-    assertTrue(machine.popItem("Candy"));
+  private void testNotEnoughMoneyException(String itemName) {
+    assertThrows(
+        VendingMachine.NotEnoughMoney.class, () -> machine.popItem(itemName));
   }
 
   @DisplayName("Candy costs 10 pence")
   @Test
-  void subtractTenPenceFromTotalValueAfterGettingCandy() {
+  void returnChangesIfAnyAfterGettingCandy() 
+    throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
     machine.takeCoin(20);
-    machine.popItem("Candy");
-    assertEquals(10, machine.getTotalValue());
+    assertEquals(20-10, machine.popItem("Candy"));
   }
 
-  @DisplayName("Failed to buy Snack when money is not enough")
+  @DisplayName("Not enough money to buy Snack")
   @Test
-  void getSnackWhenTotalValueIsLessThanFiftyPenceWillFail() {
+  void buySnackWithoutEnoughMoneyWillThrowException() {
     machine.takeCoin(20);
     machine.takeCoin(20);
     machine.takeCoin(5);
-    assertFalse(machine.popItem("Snack"));
-  }
-
-  @DisplayName("Successfully bought Snack when money is enough")
-  @Test
-  void getSnackWhenTotalValueIsNotLessThanFiftyPenceWillSucceed() {
-    machine.takeCoin(20);
-    machine.takeCoin(20);
-    machine.takeCoin(20);
-    assertTrue(machine.popItem("Snack"));
+    testNotEnoughMoneyException("Snack");
   }
 
   @DisplayName("Snack costs 50 pence")
   @Test
-  void subtractFiftyPenceFromTotalValueAfterGettingSnack() {
+  void returnChangesIfAnyAfterGettingSnack() 
+    throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
     machine.takeCoin(50);
-    machine.popItem("Snack");
-    assertEquals(0, machine.getTotalValue());
+    assertEquals(50-50, machine.popItem("Snack"));
   }
 
-  @DisplayName("Failed to buy Nuts when money is not enough")
+  @DisplayName("Not enough money to buy Nuts")
   @Test
-  void getNutsWhenTotalValueIsLessThanSeventyfivePenceWillFail() {
+  void buyNutsWithoutEnoughMoneyWillThrowException() {
     machine.takeCoin(20);
     machine.takeCoin(50);
-    assertFalse(machine.popItem("Nuts"));
-  }
-
-  @DisplayName("Successfully bought Nuts when money is enough")
-  @Test
-  void getNutsWhenTotalValueIsNotLessThanSeventyfivePenceWillSucceed() {
-    machine.takeCoin(20);
-    machine.takeCoin(20);
-    machine.takeCoin(50);
-    assertTrue(machine.popItem("Nuts"));
+    testNotEnoughMoneyException("Nuts");
   }
 
   @DisplayName("Nuts costs 75 pence")
   @Test
-  void subtractSeventyfivePenceFromTotalValueAfterGettingNuts() {
+  void returnChangesIfAnyAfterGettingNuts() 
+    throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
     machine.takeCoin(50);
     machine.takeCoin(50);
-    machine.popItem("Nuts");
-    assertEquals(25, machine.getTotalValue());
+    assertEquals(50+50-75, machine.popItem("Nuts"));
   }
 
-  @DisplayName("Failed to buy Coke when money is not enough")
+  @DisplayName("Not enough money to buy Coke")
   @Test
-  void getCokeWhenTotalValueIsLessThanHundredAndFiftyPenceWillFail() {
+  void buyCokeWithoutEnoughMoneyWillThrowException() {
     machine.takeCoin(20);
     machine.takeCoin(100);
-    assertFalse(machine.popItem("Coke"));
-  }
-
-  @DisplayName("Successfully bought Coke when money is enough")
-  @Test
-  void getCokeWhenTotalValueIsNotLessThanHundredAndFiftyPenceWillSucceed() {
-    machine.takeCoin(100);
-    machine.takeCoin(50);
-    assertTrue(machine.popItem("Coke"));
+    testNotEnoughMoneyException("Coke");
   }
 
   @DisplayName("Coke costs 150 pence")
   @Test
-  void subtractHundredAndFiftyPenceFromTotalValueAfterGettingCoke() {
+  void returnChangesIfAnyAfterGettingCoke() 
+    throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
     machine.takeCoin(100);
     machine.takeCoin(100);
-    machine.popItem("Coke");
-    assertEquals(50, machine.getTotalValue());
+    assertEquals(100+100-150, machine.popItem("Coke"));
   }
 
-  @DisplayName("Failed to buy Bottle Water when money is not enough")
+  @DisplayName("Not enough money to buy Water")
   @Test
-  void getBottleWaterWhenTotalValueIsLessThanHundredPenceWillFail() {
+  void buyBottleWaterWithoutEnoughMoneyWillThrowException() {
     machine.takeCoin(20);
-    assertFalse(machine.popItem("BottleWater"));
-  }
-
-  @DisplayName("Successfully bought Bottle Water when money is enough")
-  @Test
-  void getBottleWaterWhenTotalValueIsNotLessThanHundredPenceWillSucceed() {
-    machine.takeCoin(100);
-    machine.takeCoin(50);
-    assertTrue(machine.popItem("BottleWater"));
+    testNotEnoughMoneyException("BottleWater");
   }
 
   @DisplayName("Bottle Water costs 100 pence")
   @Test
-  void subtractHundredPenceFromTotalValueAfterGettingBottleWater() {
+  void subtractHundredPenceFromRemainingChangeAfterGettingBottleWater() 
+    throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
     machine.takeCoin(100);
     machine.takeCoin(100);
-    machine.popItem("BottleWater");
-    assertEquals(100, machine.getTotalValue());
+    assertEquals(100+100-100, machine.popItem("BottleWater"));
   }
 
   @DisplayName("Cannot buy when stock is empty")
   @Test
-  void resetVendingMachineStockToZeroWillPreventFromGettingAnyItems() {
+  void buyItemsWhenStockIsEmptyWillThrowException() {
     machine.takeCoin(100);
     machine.takeCoin(100);
     machine.resetStock(0);
     assertAll(
-        () -> assertFalse(machine.popItem("Candy")),
-        () -> assertFalse(machine.popItem("Snack")),
-        () -> assertFalse(machine.popItem("Nuts")),
-        () -> assertFalse(machine.popItem("Coke")),
-        () -> assertFalse(machine.popItem("BottleWater")),
-        () -> assertTrue(machine.isEmpty())
+      () -> testStockEmptyException("Candy"),
+      () -> testStockEmptyException("Snack"),
+      () -> testStockEmptyException("Nuts"),
+      () -> testStockEmptyException("Coke"),
+      () -> testStockEmptyException("BottleWater")
     );
+  }
+
+  private void testStockEmptyException(String itemName) {
+    assertThrows(
+      VendingMachine.StockEmpty.class, () -> machine.popItem(itemName));
   }
 
   @Test
   void resetStockToFiveForEachItem() {
     machine.resetStock(5);
-    assertFalse(machine.isEmpty());
+    assertFalse(machine.isItemEmpty("Candy"));
+    assertFalse(machine.isItemEmpty("Snack"));
+    assertFalse(machine.isItemEmpty("Nuts"));
+    assertFalse(machine.isItemEmpty("Coke"));
+    assertFalse(machine.isItemEmpty("BottleWater"));
   }
 
 }
