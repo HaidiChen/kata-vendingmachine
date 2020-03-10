@@ -23,4 +23,8 @@ public class Item {
   public int getPrice() {
     return price;
   }
+
+  public String getName() {
+    return name;
+  }
 }

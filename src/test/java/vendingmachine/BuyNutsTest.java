@@ -2,14 +2,13 @@ package vendingmachine;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
-class AppTest {
+public class BuyNutsTest {
 
   private VendingMachine machine;
   private Map<String, Item> items;
@@ -18,29 +17,31 @@ class AppTest {
   @BeforeEach
   void setUp() {
     items = new HashMap<String, Item>();
-    items.put("Candy", new Item("Candy", 10, 10));
-    items.put("Snack", new Item("Snack", 50, 10));
     items.put("Nuts", new Item("Nuts", 75, 10));
-    items.put("Coke", new Item("Coke", 150, 10));
-    items.put("BottleWater", new Item("BottleWater", 100, 10));
 
     coins = new PenceCoins();
     machine = new VendingMachine(coins, items);
   }
 
-  @Test
-  void refundClearsRemainingChange() {
-    machine.takeCoin(50);
-    machine.refund();
-    assertEquals(0, machine.getRemainingChange());
+  private void testNotEnoughMoneyException(String itemName) {
   }
 
+  @DisplayName("Not enough money to buy Nuts")
   @Test
-  void resetStockToFiveForEachItem() {
-    machine.resetStock(5);
-    for (Item item: items.values()) {
-      assertEquals(5, machine.getItemStock(item.getName()));
-    }
+  void buyNutsWithoutEnoughMoneyWillThrowException() {
+    machine.takeCoin(20);
+    machine.takeCoin(50);
+    assertThrows(
+        VendingMachine.NotEnoughMoney.class, () -> machine.popItem("Nuts"));
+  }
+
+  @DisplayName("Nuts costs 75 pence")
+  @Test
+  void returnChangesIfAnyAfterGettingNuts() 
+    throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
+    machine.takeCoin(50);
+    machine.takeCoin(50);
+    assertEquals(50+50-75, machine.popItem("Nuts"));
   }
 
 }
