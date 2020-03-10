@@ -1,6 +1,7 @@
 package vendingmachine;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
@@ -181,4 +182,19 @@ class AppTest {
     machine.popItem("BottleWater");
     assertEquals(100, machine.getTotalValue());
   }
+
+  @Test
+  void resetVendingMachineStockToZeroWillPreventFromGettingAnyItems() {
+    machine.takeCoin(100);
+    machine.takeCoin(100);
+    machine.reset(0);
+    assertAll("No Stock in Vending Machine",
+        () -> assertFalse(machine.popItem("Candy")),
+        () -> assertFalse(machine.popItem("Snack")),
+        () -> assertFalse(machine.popItem("Nuts")),
+        () -> assertFalse(machine.popItem("Coke")),
+        () -> assertFalse(machine.popItem("BottleWater"))
+    );
+  }
+
 }

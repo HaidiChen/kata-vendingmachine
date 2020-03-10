@@ -9,6 +9,7 @@ public class VendingMachine {
 
   private final Set<Integer> validCoins;
   private HashMap<String, Integer> items;
+  private HashMap<String, Integer> itemsStock;
   private int totalValue = 0;
 
   public VendingMachine() {
@@ -25,6 +26,13 @@ public class VendingMachine {
     items.put("Nuts", 75);
     items.put("Coke", 150);
     items.put("BottleWater", 100);
+
+    itemsStock = new HashMap<String, Integer>();
+    itemsStock.put("Candy", 10);
+    itemsStock.put("Snack", 10);
+    itemsStock.put("Nuts", 10);
+    itemsStock.put("Coke", 10);
+    itemsStock.put("BottleWater", 10);
   }
 
   public boolean takeCoin(int pence) {
@@ -45,11 +53,22 @@ public class VendingMachine {
 
   public boolean popItem(String itemName) {
     int itemPrice = items.get(itemName);
-    if (totalValue >= itemPrice) {
+    int stock = itemsStock.get(itemName);
+    if (totalValue >= itemPrice && stock > 0) {
       totalValue -= itemPrice;
+      stock -= 1;
+      itemsStock.put(itemName, stock);
       return true;
     }
     return false;
+  }
+
+  public void reset(int stockNumber) {
+    itemsStock.put("Candy", 0);
+    itemsStock.put("Snack", 0);
+    itemsStock.put("Nuts", 0);
+    itemsStock.put("Coke", 0);
+    itemsStock.put("BottleWater", 0);
   }
 
 }
