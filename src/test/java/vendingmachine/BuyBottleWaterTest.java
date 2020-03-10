@@ -40,20 +40,25 @@ public class BuyBottleWaterTest {
     assertEquals(100+100-100, machine.popItem("BottleWater"));
   }
 
-  @DisplayName("Cannot buy when stock is empty")
+  @DisplayName("Cannot buy when water sold out")
   @Test
-  void buyItemWhenStockIsEmptyWillThrowException() {
+  void buyWaterWhenStockIsEmptyWillThrowException() {
     machine.takeCoin(100);
     machine.takeCoin(100);
-    machine.resetStock(0);
-    for (Item item: items.values()) {
-      testStockEmptyException(item.getName());
-    }
+    machine.resetItemStock("BottleWater", 0);
+    assertThrows(
+      VendingMachine.StockEmpty.class, () -> machine.popItem("BottleWater"));
   }
 
-  private void testStockEmptyException(String itemName) {
-    assertThrows(
-      VendingMachine.StockEmpty.class, () -> machine.popItem(itemName));
+  @Test
+  void stockIsEmptyWhenSoldOut() 
+    throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
+    machine.resetItemStock("BottleWater", 2);
+    for (int i = 0; i < 2; i++) {
+      machine.takeCoin(100);
+      machine.popItem("BottleWater");
+    }
+    assertEquals(0, machine.getItemStock("BottleWater"));
   }
 
 }

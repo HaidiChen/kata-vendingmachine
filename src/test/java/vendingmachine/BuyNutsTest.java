@@ -44,4 +44,30 @@ public class BuyNutsTest {
     assertEquals(50+50-75, machine.popItem("Nuts"));
   }
 
+  @DisplayName("Cannot buy when Nuts sold out")
+  @Test
+  void buyNutsWhenStockIsEmptyWillThrowException() {
+    machine.takeCoin(100);
+    machine.resetItemStock("Nuts", 0);
+    assertThrows(
+      VendingMachine.StockEmpty.class, () -> machine.popItem("Nuts"));
+  }
+
+  @Test
+  void resetNutsStockToFive() {
+    machine.resetItemStock("Nuts", 5);
+    assertEquals(5, machine.getItemStock("Nuts"));
+  }
+
+  @Test
+  void stockIsEmptyWhenSoldOut() 
+    throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
+    machine.resetItemStock("Nuts", 2);
+    for (int i = 0; i < 2; i++) {
+      machine.takeCoin(100);
+      machine.popItem("Nuts");
+    }
+    assertEquals(0, machine.getItemStock("Nuts"));
+  }
+
 }

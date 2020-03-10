@@ -74,6 +74,11 @@ public class VendingMachine {
     }
   }
 
+  public void resetItemStock(String itemName, int stockNumber) {
+    Item item = itemList.get(itemName);
+    item.setStock(stockNumber);
+  }
+
   public int getItemStock(String itemName) {
     Item item = itemList.get(itemName);
     return item.getStock();

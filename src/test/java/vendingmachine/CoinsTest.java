@@ -76,4 +76,11 @@ public class CoinsTest {
     assertEquals(150, machine.getRemainingChange());
   }
 
+  @Test
+  void refundClearsRemainingChange() {
+    machine.takeCoin(50);
+    machine.refund();
+    assertEquals(0, machine.getRemainingChange());
+  }
+
 }
