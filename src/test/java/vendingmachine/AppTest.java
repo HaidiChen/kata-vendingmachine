@@ -98,7 +98,7 @@ class AppTest {
     machine.takeCoin(20);
     machine.takeCoin(20);
     machine.takeCoin(5);
-    assertFalse(machine.popSnack());
+    assertFalse(machine.popItem("Snack"));
   }
 
   @Test
@@ -106,13 +106,13 @@ class AppTest {
     machine.takeCoin(20);
     machine.takeCoin(20);
     machine.takeCoin(20);
-    assertTrue(machine.popSnack());
+    assertTrue(machine.popItem("Snack"));
   }
 
   @Test
   void subtractFiftyPenceFromTotalValueAfterGettingSnack() {
     machine.takeCoin(50);
-    machine.popSnack();
+    machine.popItem("Snack");
     assertEquals(0, machine.getTotalValue());
   }
 
@@ -120,7 +120,7 @@ class AppTest {
   void getNutsWhenTotalValueIsLessThanSeventyfivePenceWillFail() {
     machine.takeCoin(20);
     machine.takeCoin(50);
-    assertFalse(machine.popNuts());
+    assertFalse(machine.popItem("Nuts"));
   }
 
   @Test
@@ -128,14 +128,14 @@ class AppTest {
     machine.takeCoin(20);
     machine.takeCoin(20);
     machine.takeCoin(50);
-    assertTrue(machine.popNuts());
+    assertTrue(machine.popItem("Nuts"));
   }
 
   @Test
   void subtractSeventyfivePenceFromTotalValueAfterGettingNuts() {
     machine.takeCoin(50);
     machine.takeCoin(50);
-    machine.popNuts();
+    machine.popItem("Nuts");
     assertEquals(25, machine.getTotalValue());
   }
 

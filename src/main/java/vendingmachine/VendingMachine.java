@@ -21,6 +21,8 @@ public class VendingMachine {
 
     items = new HashMap<String, Integer>();
     items.put("Candy", 10);
+    items.put("Snack", 50);
+    items.put("Nuts", 75);
   }
 
   public boolean takeCoin(int pence) {
@@ -43,26 +45,6 @@ public class VendingMachine {
     int itemPrice = items.get(itemName);
     if (totalValue >= itemPrice) {
       totalValue -= itemPrice;
-      return true;
-    }
-    return false;
-  }
-
-  public boolean popCandy() {
-    return popItem("Candy");
-  }
-
-  public boolean popSnack() {
-    if (totalValue >= 50) {
-      totalValue -= 50;
-      return true;
-    }
-    return false;
-  }
-
-  public boolean popNuts() {
-    if (totalValue >= 75) {
-      totalValue -= 75;
       return true;
     }
     return false;
