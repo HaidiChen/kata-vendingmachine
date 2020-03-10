@@ -23,6 +23,8 @@ public class VendingMachine {
     items.put("Candy", 10);
     items.put("Snack", 50);
     items.put("Nuts", 75);
+    items.put("Coke", 150);
+    items.put("Bottle Water", 100);
   }
 
   public boolean takeCoin(int pence) {

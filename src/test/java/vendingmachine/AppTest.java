@@ -80,7 +80,7 @@ class AppTest {
   }
 
   @Test
-  void getCandyWhenTotalValueIsGreaterThanOrEqualToTenPenceWillSucceed() {
+  void getCandyWhenTotalValueIsNotLessThanTenPenceWillSucceed() {
     machine.takeCoin(5);
     machine.takeCoin(5);
     assertTrue(machine.popItem("Candy"));
@@ -102,7 +102,7 @@ class AppTest {
   }
 
   @Test
-  void getSnackWhenTotalValueIsGreaterThanOrEqualToFiftyPenceWillSucceed() {
+  void getSnackWhenTotalValueIsNotLessThanFiftyPenceWillSucceed() {
     machine.takeCoin(20);
     machine.takeCoin(20);
     machine.takeCoin(20);
@@ -124,7 +124,7 @@ class AppTest {
   }
 
   @Test
-  void getNutsWhenTotalValueIsGreaterThanOrEqualToSeventyfivePenceWillSucceed() {
+  void getNutsWhenTotalValueIsNotLessThanSeventyfivePenceWillSucceed() {
     machine.takeCoin(20);
     machine.takeCoin(20);
     machine.takeCoin(50);
@@ -137,6 +137,28 @@ class AppTest {
     machine.takeCoin(50);
     machine.popItem("Nuts");
     assertEquals(25, machine.getTotalValue());
+  }
+
+  @Test
+  void getCokeWhenTotalValueIsLessThanHundredAndFiftyPenceWillFail() {
+    machine.takeCoin(20);
+    machine.takeCoin(100);
+    assertFalse(machine.popItem("Coke"));
+  }
+
+  @Test
+  void getCokeWhenTotalValueIsNotLessThanHundredAndFiftyPenceWillSucceed() {
+    machine.takeCoin(100);
+    machine.takeCoin(50);
+    assertTrue(machine.popItem("Coke"));
+  }
+
+  @Test
+  void subtractHundredAndFiftyPenceFromTotalValueAfterGettingCoke() {
+    machine.takeCoin(100);
+    machine.takeCoin(100);
+    machine.popItem("Coke");
+    assertEquals(50, machine.getTotalValue());
   }
 
 }
