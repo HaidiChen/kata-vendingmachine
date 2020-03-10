@@ -161,4 +161,24 @@ class AppTest {
     assertEquals(50, machine.getTotalValue());
   }
 
+  @Test
+  void getBottleWaterWhenTotalValueIsLessThanHundredPenceWillFail() {
+    machine.takeCoin(20);
+    assertFalse(machine.popItem("BottleWater"));
+  }
+
+  @Test
+  void getBottleWaterWhenTotalValueIsNotLessThanHundredPenceWillSucceed() {
+    machine.takeCoin(100);
+    machine.takeCoin(50);
+    assertTrue(machine.popItem("BottleWater"));
+  }
+
+  @Test
+  void subtractHundredPenceFromTotalValueAfterGettingBottleWater() {
+    machine.takeCoin(100);
+    machine.takeCoin(100);
+    machine.popItem("BottleWater");
+    assertEquals(100, machine.getTotalValue());
+  }
 }
