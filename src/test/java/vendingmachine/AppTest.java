@@ -18,7 +18,7 @@ class AppTest {
   @DisplayName("Accept 1, 5, 20, 50, 100 pence coins")
   @Test
   void machineTakesOneFiveTwentyAndFiftyPenceCoins() {
-    assertAll("valid pence coins",
+    assertAll(
       () -> assertTrue(machine.takeCoin(1)),
       () -> assertTrue(machine.takeCoin(5)),
       () -> assertTrue(machine.takeCoin(20)),
@@ -27,9 +27,10 @@ class AppTest {
     );
   }
 
+  @DisplayName("Machine does not accept invalid coins")
   @Test
   void machineRejectsInvalidCoins() {
-    assertAll("invalid pence coins",
+    assertAll(
         () -> assertFalse(machine.takeCoin(0)),
         () -> assertFalse(machine.takeCoin(2)),
         () -> assertFalse(machine.takeCoin(6)),
@@ -70,6 +71,7 @@ class AppTest {
     assertEquals(0, machine.getTotalValue());
   }
 
+  @DisplayName("Failed to buy Candy when money is not enough")
   @Test
   void getCandyWhenTotalValueIsLessThanTenPenceWillFail() {
     machine.takeCoin(1);
@@ -80,6 +82,7 @@ class AppTest {
     assertFalse(machine.popItem("Candy"));
   }
 
+  @DisplayName("Successfully bought Candy when money is enough")
   @Test
   void getCandyWhenTotalValueIsNotLessThanTenPenceWillSucceed() {
     machine.takeCoin(5);
@@ -87,6 +90,7 @@ class AppTest {
     assertTrue(machine.popItem("Candy"));
   }
 
+  @DisplayName("Candy costs 10 pence")
   @Test
   void subtractTenPenceFromTotalValueAfterGettingCandy() {
     machine.takeCoin(20);
@@ -94,6 +98,7 @@ class AppTest {
     assertEquals(10, machine.getTotalValue());
   }
 
+  @DisplayName("Failed to buy Snack when money is not enough")
   @Test
   void getSnackWhenTotalValueIsLessThanFiftyPenceWillFail() {
     machine.takeCoin(20);
@@ -102,6 +107,7 @@ class AppTest {
     assertFalse(machine.popItem("Snack"));
   }
 
+  @DisplayName("Successfully bought Snack when money is enough")
   @Test
   void getSnackWhenTotalValueIsNotLessThanFiftyPenceWillSucceed() {
     machine.takeCoin(20);
@@ -110,6 +116,7 @@ class AppTest {
     assertTrue(machine.popItem("Snack"));
   }
 
+  @DisplayName("Snack costs 50 pence")
   @Test
   void subtractFiftyPenceFromTotalValueAfterGettingSnack() {
     machine.takeCoin(50);
@@ -117,6 +124,7 @@ class AppTest {
     assertEquals(0, machine.getTotalValue());
   }
 
+  @DisplayName("Failed to buy Nuts when money is not enough")
   @Test
   void getNutsWhenTotalValueIsLessThanSeventyfivePenceWillFail() {
     machine.takeCoin(20);
@@ -124,6 +132,7 @@ class AppTest {
     assertFalse(machine.popItem("Nuts"));
   }
 
+  @DisplayName("Successfully bought Nuts when money is enough")
   @Test
   void getNutsWhenTotalValueIsNotLessThanSeventyfivePenceWillSucceed() {
     machine.takeCoin(20);
@@ -132,6 +141,7 @@ class AppTest {
     assertTrue(machine.popItem("Nuts"));
   }
 
+  @DisplayName("Nuts costs 75 pence")
   @Test
   void subtractSeventyfivePenceFromTotalValueAfterGettingNuts() {
     machine.takeCoin(50);
@@ -140,6 +150,7 @@ class AppTest {
     assertEquals(25, machine.getTotalValue());
   }
 
+  @DisplayName("Failed to buy Coke when money is not enough")
   @Test
   void getCokeWhenTotalValueIsLessThanHundredAndFiftyPenceWillFail() {
     machine.takeCoin(20);
@@ -147,6 +158,7 @@ class AppTest {
     assertFalse(machine.popItem("Coke"));
   }
 
+  @DisplayName("Successfully bought Coke when money is enough")
   @Test
   void getCokeWhenTotalValueIsNotLessThanHundredAndFiftyPenceWillSucceed() {
     machine.takeCoin(100);
@@ -154,6 +166,7 @@ class AppTest {
     assertTrue(machine.popItem("Coke"));
   }
 
+  @DisplayName("Coke costs 150 pence")
   @Test
   void subtractHundredAndFiftyPenceFromTotalValueAfterGettingCoke() {
     machine.takeCoin(100);
@@ -162,12 +175,14 @@ class AppTest {
     assertEquals(50, machine.getTotalValue());
   }
 
+  @DisplayName("Failed to buy Bottle Water when money is not enough")
   @Test
   void getBottleWaterWhenTotalValueIsLessThanHundredPenceWillFail() {
     machine.takeCoin(20);
     assertFalse(machine.popItem("BottleWater"));
   }
 
+  @DisplayName("Successfully bought Bottle Water when money is enough")
   @Test
   void getBottleWaterWhenTotalValueIsNotLessThanHundredPenceWillSucceed() {
     machine.takeCoin(100);
@@ -175,6 +190,7 @@ class AppTest {
     assertTrue(machine.popItem("BottleWater"));
   }
 
+  @DisplayName("Bottle Water costs 100 pence")
   @Test
   void subtractHundredPenceFromTotalValueAfterGettingBottleWater() {
     machine.takeCoin(100);
@@ -183,12 +199,13 @@ class AppTest {
     assertEquals(100, machine.getTotalValue());
   }
 
+  @DisplayName("Cannot buy when stock is empty")
   @Test
   void resetVendingMachineStockToZeroWillPreventFromGettingAnyItems() {
     machine.takeCoin(100);
     machine.takeCoin(100);
     machine.reset(0);
-    assertAll("No Stock in Vending Machine",
+    assertAll(
         () -> assertFalse(machine.popItem("Candy")),
         () -> assertFalse(machine.popItem("Snack")),
         () -> assertFalse(machine.popItem("Nuts")),
