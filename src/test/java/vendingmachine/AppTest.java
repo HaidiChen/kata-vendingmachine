@@ -1,5 +1,8 @@
 package vendingmachine;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +15,15 @@ class AppTest {
 
   @BeforeEach
   void setUp() {
+    Map<String, Item> items = new HashMap<String, Item>();
+    items.put("Candy", new Item("Candy", 10, 10));
+    items.put("Snack", new Item("Snack", 50, 10));
+    items.put("Nuts", new Item("Nuts", 75, 10));
+    items.put("Coke", new Item("Coke", 150, 10));
+    items.put("BottleWater", new Item("BottleWater", 100, 10));
+
     Coins coins = new PenceCoins();
-    machine = new VendingMachine(coins);
+    machine = new VendingMachine(coins, items);
   }
 
   @DisplayName("Accept 1, 5, 20, 50, 100 pence coins")

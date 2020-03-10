@@ -1,33 +1,21 @@
 package vendingmachine;
 
 import java.util.Set;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class VendingMachine {
 
   private Coins coins;
+  private Map<String, Item> itemList;
   private Map<String, Integer> items;
   private Map<String, Integer> itemsStock;
   private int totalValue = 0;
 
-  public VendingMachine(Coins coins) {
+  public VendingMachine(Coins coins, Map<String, Item> itemList) {
     this.coins = coins;
-
-    items = new HashMap<String, Integer>();
-    setItems();
-
-    itemsStock = new HashMap<String, Integer>();
-    resetStock(10);
-  }
-
-  private void setItems() {
-    items.put("Candy", 10);
-    items.put("Snack", 50);
-    items.put("Nuts", 75);
-    items.put("Coke", 150);
-    items.put("BottleWater", 100);
+    this.itemList = itemList;
   }
 
   public boolean takeCoin(int pence) {
@@ -47,29 +35,27 @@ public class VendingMachine {
   }
 
   public boolean popItem(String itemName) {
-    int itemPrice = items.get(itemName);
-    int stock = itemsStock.get(itemName);
+    Item item = itemList.get(itemName);
+    int itemPrice = item.getPrice();
+    int stock = item.getStock();
     if (totalValue >= itemPrice && stock > 0) {
       totalValue -= itemPrice;
       stock -= 1;
-      itemsStock.put(itemName, stock);
+      item.setStock(stock);
       return true;
     }
     return false;
   }
 
   public void resetStock(int stockNumber) {
-    itemsStock.put("Candy", stockNumber);
-    itemsStock.put("Snack", stockNumber);
-    itemsStock.put("Nuts", stockNumber);
-    itemsStock.put("Coke", stockNumber);
-    itemsStock.put("BottleWater", stockNumber);
+    for (Item item: itemList.values()) {
+      item.setStock(stockNumber);
+    }
   }
 
   public boolean isEmpty() {
-    Set<String> itemNames = itemsStock.keySet();
-    for (String name: itemNames) {
-      if (itemsStock.get(name) == 0) {
+    for (Item item: itemList.values()) {
+      if (item.getStock() == 0) {
         return true;
       }
     }
