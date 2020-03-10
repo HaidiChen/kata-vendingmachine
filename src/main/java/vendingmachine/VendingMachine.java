@@ -31,8 +31,10 @@ public class VendingMachine {
     return remainingChange;
   }
 
-  public void refund() {
+  public int refund() {
+    int refundAmount = remainingChange;
     remainingChange = 0;
+    return refundAmount;
   }
 
   public int popItem(String itemName) throws NotEnoughMoney, StockEmpty {

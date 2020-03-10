@@ -17,12 +17,6 @@ public class CoinsTest {
   @BeforeEach
   void setUp() {
     items = new HashMap<String, Item>();
-    items.put("Candy", new Item("Candy", 10, 10));
-    items.put("Snack", new Item("Snack", 50, 10));
-    items.put("Nuts", new Item("Nuts", 75, 10));
-    items.put("Coke", new Item("Coke", 150, 10));
-    items.put("BottleWater", new Item("BottleWater", 100, 10));
-
     coins = PenceCoins.getInstance();
     machine = new VendingMachine(coins, items);
   }
@@ -77,9 +71,9 @@ public class CoinsTest {
   }
 
   @Test
-  void refundClearsRemainingChange() {
+  void refundReturnsRemainingChangeBackAndSetRemainingChangeToZero() {
     machine.takeCoin(50);
-    machine.refund();
+    assertEquals(50, machine.refund());
     assertEquals(0, machine.getRemainingChange());
   }
 
