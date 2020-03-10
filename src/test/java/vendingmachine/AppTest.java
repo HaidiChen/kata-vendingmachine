@@ -12,7 +12,8 @@ class AppTest {
 
   @BeforeEach
   void setUp() {
-    machine = new VendingMachine();
+    Coins coins = new PenceCoins();
+    machine = new VendingMachine(coins);
   }
 
   @DisplayName("Accept 1, 5, 20, 50, 100 pence coins")
@@ -204,14 +205,21 @@ class AppTest {
   void resetVendingMachineStockToZeroWillPreventFromGettingAnyItems() {
     machine.takeCoin(100);
     machine.takeCoin(100);
-    machine.reset(0);
+    machine.resetStock(0);
     assertAll(
         () -> assertFalse(machine.popItem("Candy")),
         () -> assertFalse(machine.popItem("Snack")),
         () -> assertFalse(machine.popItem("Nuts")),
         () -> assertFalse(machine.popItem("Coke")),
-        () -> assertFalse(machine.popItem("BottleWater"))
+        () -> assertFalse(machine.popItem("BottleWater")),
+        () -> assertTrue(machine.isEmpty())
     );
+  }
+
+  @Test
+  void resetStockToFiveForEachItem() {
+    machine.resetStock(5);
+    assertFalse(machine.isEmpty());
   }
 
 }
