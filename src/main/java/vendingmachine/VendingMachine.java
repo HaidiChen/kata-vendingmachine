@@ -33,6 +33,10 @@ public class VendingMachine {
   }
 
   public int refund() {
+    return returnRemainingChangeToUserAndSetRemaingChangeToZero();
+  }
+
+  private int returnRemainingChangeToUserAndSetRemaingChangeToZero() {
     int refundAmount = remainingChange;
     remainingChange = 0;
     return refundAmount;

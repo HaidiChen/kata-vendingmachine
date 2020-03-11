@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class MachineInteractor {
 
   private VendingMachine machine;
+  private OutputPlatform output;
 
   private boolean refundRequested = false;
   private Scanner scanner;
@@ -16,12 +17,16 @@ public class MachineInteractor {
     scanner = new Scanner(System.in);
   }
 
+  public void setOutputPlatform(OutputPlatform output) {
+    this.output = output;
+  }
+
   private int insertCoins(int moneyInMachine) {
-    System.out.println("Insert coin (1, 5, 20, 50, 100) " + 
+    output.print("Insert coin (1, 5, 20, 50, 100) " + 
         "Or press r for requesting a refund:");
     String coinInserted = scanner.nextLine();
     if (coinInserted.equals("r")) {
-      System.out.println("Here is your refund: " + machine.refund() + " Pence");
+      output.print("Here is your refund: " + machine.refund() + " Pence");
       refundRequested = true;
     }
     else {
@@ -33,20 +38,20 @@ public class MachineInteractor {
   private void buyItem(String itemName, int totalMoneyInMachine) {
     try {
       int changes = machine.popItem(itemName);
-      System.out.println(
+      output.print(
           "You got yourself a " + itemName + 
           ", and here is your change: " + changes);
     }
     catch (VendingMachine.NotEnoughMoney e) {
-      System.out.println(e.getMessage());
-      System.out.println("[Money Inserted]: " + machine.getRemainingChange());
+      output.print(e.getMessage());
+      output.print("[Money Inserted]: " + machine.getRemainingChange());
       int currentMoneyInMachine = insertCoins(totalMoneyInMachine);
       if (!refundRequested) {
         buyItem(itemName, currentMoneyInMachine);
       }
     }
     catch (VendingMachine.StockEmpty ex) {
-      System.out.println(ex.getMessage());
+      output.print(ex.getMessage());
     }
   }
 
@@ -56,18 +61,18 @@ public class MachineInteractor {
   }
 
   private void displayItemsInMachine() {
-    System.out.println("We have following products for sale: ");
+    output.print("We have following products for sale: ");
     Products products = machine.getProducts();
     Iterator<String> names= products.getAllItemNames();
     while (names.hasNext()) {
       Item item = products.getItem(names.next());
-      System.out.println("--" + item.getName() + 
+      output.print("--" + item.getName() + 
           " (" + item.getPrice() + " Pence) [" + item.getStock() + " in stock]");
     }
   }
 
   private void chooseOneItemToBuy() {
-    System.out.println("which one do you want?");
+    output.print("which one do you want?");
     String itemName = scanner.nextLine();
     buyItem(itemName, 0);
   }
