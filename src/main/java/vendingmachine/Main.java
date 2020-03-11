@@ -9,7 +9,9 @@ public class Main {
 
     MachineInteractor interactor = new MachineInteractor(machine);
     OutputPlatform output = new ConsoleOutput();
+    InputPlatform input = new ConsoleInput();
     interactor.setOutputPlatform(output);
+    interactor.setInputPlatform(input);
     interactor.start();
   }
 

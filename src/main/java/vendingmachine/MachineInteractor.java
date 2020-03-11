@@ -6,13 +6,16 @@ public class MachineInteractor {
 
   private VendingMachine machine;
   private OutputPlatform output;
+  private InputPlatform input;
 
   private boolean refundRequested = false;
-  private Scanner scanner;
 
   public MachineInteractor(VendingMachine machine) {
     this.machine = machine;
-    scanner = new Scanner(System.in);
+  }
+
+  public void setInputPlatform(InputPlatform input) {
+    this.input = input;
   }
 
   public void setOutputPlatform(OutputPlatform output) {
@@ -21,7 +24,7 @@ public class MachineInteractor {
 
   private int insertCoins(int moneyInMachine) {
     output.printInstruction();
-    String coinInserted = scanner.nextLine();
+    String coinInserted = input.getStringInput();
     if (coinInserted.equals("r")) {
       output.printRefundInfo(machine.refund());
       refundRequested = true;
@@ -62,7 +65,7 @@ public class MachineInteractor {
 
   private void chooseOneItemToBuy() {
     output.printAskingForSelection();
-    String itemName = scanner.nextLine();
+    String itemName = input.getStringInput();
     buyItem(itemName, 0);
   }
 
