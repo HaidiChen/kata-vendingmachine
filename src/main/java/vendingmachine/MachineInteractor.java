@@ -1,8 +1,8 @@
 package vendingmachine;
 
+import java.util.Iterator;
 import java.util.Set;
 import java.util.Scanner;
-import java.util.Map;
 
 public class MachineInteractor {
 
@@ -56,12 +56,13 @@ public class MachineInteractor {
   }
 
   private void displayItemsInMachine() {
-    System.out.println("We have following items: ");
-    Map<String, Item> items = machine.getItemsMap();
-    for (String name: (Set<String>)items.keySet()) {
-      Item item = items.get(name);
-      System.out.println("--" + name + " (" + item.getPrice() + " Pence) [" + 
-          machine.getItemStock(name) + " in stock]");
+    System.out.println("We have following products for sale: ");
+    Products products = machine.getProducts();
+    Iterator<String> names= products.getAllItemNames();
+    while (names.hasNext()) {
+      Item item = products.getItem(names.next());
+      System.out.println("--" + item.getName() + 
+          " (" + item.getPrice() + " Pence) [" + item.getStock() + " in stock]");
     }
   }
 

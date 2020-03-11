@@ -1,22 +1,19 @@
 package vendingmachine;
 
-import java.util.Map;
-import java.util.HashMap;
-
 public class VendingMachine {
 
   private Coins coins;
-  private Map<String, Item> itemsMap;
   private int remainingChange = 0;
   private Item requestedItem;
+  private Products products;
 
-  public VendingMachine(Coins coins, Map<String, Item> itemsMap) {
+  public VendingMachine(Coins coins, Products products) {
     this.coins = coins;
-    this.itemsMap = itemsMap;
+    this.products = products;
   }
 
-  public Map<String, Item> getItemsMap() {
-    return itemsMap;
+  public Products getProducts() {
+    return products;
   }
 
   public boolean takeCoin(int pence) {
@@ -42,7 +39,7 @@ public class VendingMachine {
   }
 
   public int popItem(String itemName) throws NotEnoughMoney, StockEmpty {
-    requestedItem = itemsMap.get(itemName);
+    requestedItem = products.getItem(itemName);
     if (hasEnoughMoneyAndItemInStock()) {
       chargeAndDecreaseStock();
       return refund();
@@ -74,19 +71,13 @@ public class VendingMachine {
     requestedItem.setStock(requestedItem.getStock() - 1);
   }
 
-  public void resetStock(int stockNumber) {
-    for (Item item: itemsMap.values()) {
-      item.setStock(stockNumber);
-    }
-  }
-
   public void resetItemStock(String itemName, int stockNumber) {
-    Item item = itemsMap.get(itemName);
+    Item item = products.getItem(itemName);
     item.setStock(stockNumber);
   }
 
   public int getItemStock(String itemName) {
-    Item item = itemsMap.get(itemName);
+    Item item = products.getItem(itemName);
     return item.getStock();
   }
 

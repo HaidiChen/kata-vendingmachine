@@ -1,8 +1,5 @@
 package vendingmachine;
 
-import java.util.Map;
-import java.util.HashMap;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,16 +8,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BuyBottleWaterTest {
 
   private VendingMachine machine;
-  private Map<String, Item> items;
   private Coins coins;
+  private Products products;
 
   @BeforeEach
   void setUp() {
-    items = new HashMap<String, Item>();
-    items.put("BottleWater", new Item("BottleWater", 100, 10));
-
+    products = new OnSaleProducts();
+    products.addItem(new Item("BottleWater", 100, 10));
+    
     coins = PenceCoins.getInstance();
-    machine = new VendingMachine(coins, items);
+    machine = new VendingMachine(coins, products);
   }
 
   @DisplayName("Not enough money to buy Water")
