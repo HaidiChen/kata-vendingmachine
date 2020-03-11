@@ -1,5 +1,12 @@
 package vendingmachine;
 
 public interface OutputPlatform {
-  public void print(String info);
+  public void printAskingForSelection();
+  public void printExceptionMessage(Exception ex);
+  public void printSalesTitle();
+  public void printItemsNamePriceAndStock(Products products);
+  public void printNameOfItemPurchasedAndChange(String itemName, int change);
+  public void printMoneyPaid(int moneyPaid);
+  public void printInstruction();
+  public void printRefundInfo(int refundAmount);
 }

@@ -1,7 +1,5 @@
 package vendingmachine;
 
-import java.util.Iterator;
-import java.util.Set;
 import java.util.Scanner;
 
 public class MachineInteractor {
@@ -22,11 +20,10 @@ public class MachineInteractor {
   }
 
   private int insertCoins(int moneyInMachine) {
-    output.print("Insert coin (1, 5, 20, 50, 100) " + 
-        "Or press r for requesting a refund:");
+    output.printInstruction();
     String coinInserted = scanner.nextLine();
     if (coinInserted.equals("r")) {
-      output.print("Here is your refund: " + machine.refund() + " Pence");
+      output.printRefundInfo(machine.refund());
       refundRequested = true;
     }
     else {
@@ -37,21 +34,19 @@ public class MachineInteractor {
 
   private void buyItem(String itemName, int totalMoneyInMachine) {
     try {
-      int changes = machine.popItem(itemName);
-      output.print(
-          "You got yourself a " + itemName + 
-          ", and here is your change: " + changes);
+      int change = machine.popItem(itemName);
+      output.printNameOfItemPurchasedAndChange(itemName, change);
     }
     catch (VendingMachine.NotEnoughMoney e) {
-      output.print(e.getMessage());
-      output.print("[Money Inserted]: " + machine.getRemainingChange());
+      output.printExceptionMessage(e);
+      output.printMoneyPaid(machine.getRemainingChange());
       int currentMoneyInMachine = insertCoins(totalMoneyInMachine);
       if (!refundRequested) {
         buyItem(itemName, currentMoneyInMachine);
       }
     }
     catch (VendingMachine.StockEmpty ex) {
-      output.print(ex.getMessage());
+      output.printExceptionMessage(ex);
     }
   }
 
@@ -61,18 +56,12 @@ public class MachineInteractor {
   }
 
   private void displayItemsInMachine() {
-    output.print("We have following products for sale: ");
-    Products products = machine.getProducts();
-    Iterator<String> names= products.getAllItemNames();
-    while (names.hasNext()) {
-      Item item = products.getItem(names.next());
-      output.print("--" + item.getName() + 
-          " (" + item.getPrice() + " Pence) [" + item.getStock() + " in stock]");
-    }
+    output.printSalesTitle();
+    output.printItemsNamePriceAndStock(machine.getProducts());
   }
 
   private void chooseOneItemToBuy() {
-    output.print("which one do you want?");
+    output.printAskingForSelection();
     String itemName = scanner.nextLine();
     buyItem(itemName, 0);
   }
