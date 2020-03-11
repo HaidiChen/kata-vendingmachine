@@ -33,7 +33,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClassName = 'vendingmachine.App'
+    mainClassName = 'vendingmachine.Main'
 }
 
 test {
