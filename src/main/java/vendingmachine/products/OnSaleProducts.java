@@ -1,8 +1,11 @@
-package vendingmachine;
+package vendingmachine.products;
 
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+
+import vendingmachine.machine.Products;
+import vendingmachine.machine.Item;
 
 public class OnSaleProducts implements Products {
 

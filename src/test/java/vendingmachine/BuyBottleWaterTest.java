@@ -5,6 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
+import vendingmachine.machine.*;
+import vendingmachine.products.*;
+import vendingmachine.coins.*;
+
 public class BuyBottleWaterTest {
 
   private VendingMachine machine;
@@ -14,7 +18,7 @@ public class BuyBottleWaterTest {
   @BeforeEach
   void setUp() {
     products = new OnSaleProducts();
-    products.addItem(new Item("BottleWater", 100, 10));
+    products.addItem(new ItemInfo("BottleWater", 100, 10));
     
     coins = PenceCoins.getInstance();
     machine = new VendingMachine(coins, products);

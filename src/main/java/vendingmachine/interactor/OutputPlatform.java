@@ -1,4 +1,6 @@
-package vendingmachine;
+package vendingmachine.interactor;
+
+import vendingmachine.machine.Products;
 
 public interface OutputPlatform {
   public void printAskingForSelection();

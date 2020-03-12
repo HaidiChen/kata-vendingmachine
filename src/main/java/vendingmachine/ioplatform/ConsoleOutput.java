@@ -1,5 +1,8 @@
-package vendingmachine;
+package vendingmachine.ioplatform;
 
+import vendingmachine.interactor.OutputPlatform;
+import vendingmachine.machine.Products;
+import vendingmachine.machine.Item;
 import java.util.Iterator;
 
 public class ConsoleOutput implements OutputPlatform {

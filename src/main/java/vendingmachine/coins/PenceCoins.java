@@ -1,4 +1,6 @@
-package vendingmachine;
+package vendingmachine.coins;
+
+import vendingmachine.machine.Coins;
 
 import java.util.Set;
 import java.util.HashSet;

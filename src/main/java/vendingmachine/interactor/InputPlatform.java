@@ -1,4 +1,4 @@
-package vendingmachine;
+package vendingmachine.interactor;
 
 public interface InputPlatform {
 

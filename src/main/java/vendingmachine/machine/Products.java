@@ -1,4 +1,4 @@
-package vendingmachine;
+package vendingmachine.machine;
 
 import java.util.Iterator;
 

@@ -1,5 +1,6 @@
-package vendingmachine;
+package vendingmachine.interactor;
 
+import vendingmachine.machine.VendingMachine;
 import java.util.Scanner;
 
 public class MachineInteractor {
@@ -10,8 +11,11 @@ public class MachineInteractor {
   private InputPlatform input;
   private boolean refundRequested = false;
 
-  public MachineInteractor(VendingMachine machine) {
+  public MachineInteractor(
+      VendingMachine machine, InputPlatform input, OutputPlatform output) {
     this.machine = machine;
+    this.input = input;
+    this.output = output;
   }
 
   public void setInputPlatform(InputPlatform input) {
