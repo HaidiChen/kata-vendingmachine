@@ -1,6 +1,6 @@
 package vendingmachine.interactor;
 
-import vendingmachine.machine.VendingMachine;
+import vendingmachine.machine.*;
 import java.util.Scanner;
 
 public class MachineInteractor {
@@ -81,10 +81,10 @@ public class MachineInteractor {
     try {
       returnTheSelectedItemAndChangeIfAny(itemName);
     }
-    catch (VendingMachine.NotEnoughMoney e) {
+    catch (NotEnoughMoney e) {
       informUserOfNextSteps(e, itemName, moneyPaidSoFar);
     }
-    catch (VendingMachine.StockEmpty ex) {
+    catch (StockEmpty ex) {
       informUserOfItemSoldOutAndQuit(ex);
     }
   }
@@ -122,7 +122,7 @@ public class MachineInteractor {
   }
 
   private void returnTheSelectedItemAndChangeIfAny(String itemName) 
-      throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
+      throws NotEnoughMoney, StockEmpty {
     int change = machine.popItem(itemName);
     output.printNameOfItemPurchasedAndChange(itemName, change);
   }

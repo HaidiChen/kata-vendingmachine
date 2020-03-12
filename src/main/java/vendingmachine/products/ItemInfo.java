@@ -1,4 +1,4 @@
-package vendingmachine.machine;
+package vendingmachine.products;
 
 import vendingmachine.machine.Item;
 

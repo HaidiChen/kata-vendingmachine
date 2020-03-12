@@ -11,7 +11,7 @@ public class Main {
   public static void main(String[] args) {
     Products products = prepareItemsForMachine();
     Coins penceCoins = PenceCoins.getInstance();
-    VendingMachine machine = new VendingMachine(penceCoins, products);
+    VendingMachine machine = new MyVendingMachine(penceCoins, products);
 
     OutputPlatform output = new ConsoleOutput();
     InputPlatform input = new ConsoleInput();

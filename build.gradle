@@ -21,6 +21,9 @@ repositories {
 }
 
 dependencies {
+
+    testCompile 'org.mockito:mockito-core:2.+'
+
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:28.1-jre'
 

@@ -1,27 +1,38 @@
 package vendingmachine;
 
+import static org.mockito.Mockito.*;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
 import vendingmachine.machine.*;
-import vendingmachine.products.*;
-import vendingmachine.coins.*;
+import vendingmachine.products.ItemInfo;
+import vendingmachine.main.MyVendingMachine;
 
 public class BuyNutsTest {
 
   private VendingMachine machine;
-  private Coins coins;
-  private Products products;
+  private Coins mockedCoins;
+  private Products mockedProducts;
+  private Item item;
 
   @BeforeEach
   void setUp() {
-    products = new OnSaleProducts();
-    products.addItem(new ItemInfo("Nuts", 75, 10));
+    item = new ItemInfo("Nuts", 75, 10);
+    mockedProducts = mock(Products.class);
+    when(mockedProducts.getItem("Nuts")).thenReturn(item);
+
+    mockedCoins = mock(Coins.class);
+    when(
+      mockedCoins.hasValue(
+        intThat(coin -> CoinsTest.isValid(coin)))).thenReturn(true);
+    when(
+      mockedCoins.hasValue(
+        intThat(coin -> CoinsTest.isNotValid(coin)))).thenReturn(false);
     
-    coins = PenceCoins.getInstance();
-    machine = new VendingMachine(coins, products);
+    machine = new MyVendingMachine(mockedCoins, mockedProducts);
   }
 
   private void testNotEnoughMoneyException(String itemName) {
@@ -32,14 +43,13 @@ public class BuyNutsTest {
   void buyNutsWithoutEnoughMoneyWillThrowException() {
     machine.takeCoin(20);
     machine.takeCoin(50);
-    assertThrows(
-        VendingMachine.NotEnoughMoney.class, () -> machine.popItem("Nuts"));
+    assertThrows(NotEnoughMoney.class, () -> machine.popItem("Nuts"));
   }
 
   @DisplayName("Nuts costs 75 pence")
   @Test
   void returnChangesIfAnyAfterGettingNutsAndSetRemainingChangeToZero() 
-    throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
+    throws NotEnoughMoney, StockEmpty {
     machine.takeCoin(50);
     machine.takeCoin(50);
     assertEquals(50+50-75, machine.popItem("Nuts"));
@@ -51,8 +61,7 @@ public class BuyNutsTest {
   void buyNutsWhenStockIsEmptyWillThrowException() {
     machine.takeCoin(100);
     machine.resetItemStock("Nuts", 0);
-    assertThrows(
-      VendingMachine.StockEmpty.class, () -> machine.popItem("Nuts"));
+    assertThrows(StockEmpty.class, () -> machine.popItem("Nuts"));
   }
 
   @Test
@@ -62,8 +71,7 @@ public class BuyNutsTest {
   }
 
   @Test
-  void stockIsEmptyWhenSoldOut() 
-    throws VendingMachine.NotEnoughMoney, VendingMachine.StockEmpty {
+  void stockIsEmptyWhenSoldOut() throws NotEnoughMoney, StockEmpty {
     machine.resetItemStock("Nuts", 2);
     for (int i = 0; i < 2; i++) {
       machine.takeCoin(100);

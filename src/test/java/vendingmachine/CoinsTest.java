@@ -1,30 +1,33 @@
 package vendingmachine;
 
+import static org.mockito.Mockito.*;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
+import vendingmachine.main.MyVendingMachine;
 import vendingmachine.machine.*;
-import vendingmachine.products.*;
-import vendingmachine.coins.*;
 
 public class CoinsTest {
 
   private VendingMachine machine;
-  private Coins coins;
-  private Products products;
+  private Coins mockedCoins;
+  private Products mockedProducts;
 
   @BeforeEach
   void setUp() {
-    products = new OnSaleProducts();
-    coins = PenceCoins.getInstance();
-    machine = new VendingMachine(coins, products);
+    mockedProducts = mock(Products.class);
+    mockedCoins = mock(Coins.class);
+    machine = new MyVendingMachine(mockedCoins, mockedProducts);
+    when(mockedCoins.hasValue(intThat(coin -> isValid(coin)))).thenReturn(true);
+    when(
+      mockedCoins.hasValue(intThat(coin -> isNotValid(coin)))).thenReturn(false);
   }
 
-  @DisplayName("Accept 1, 5, 20, 50, 100 pence coins")
   @Test
-  void machineTakesOneFiveTwentyAndFiftyPenceCoins() {
+  void machineTakesOneFiveTwentyFiftyAndHundredPenceCoins() {
     assertAll(
       () -> assertTrue(machine.takeCoin(1)),
       () -> assertTrue(machine.takeCoin(5)),
@@ -34,7 +37,14 @@ public class CoinsTest {
     );
   }
 
-  @DisplayName("Machine does not accept invalid coins")
+  public static boolean isValid(int coin) {
+    return coin == 1 || coin == 5 || coin == 20 || coin == 50 || coin == 100;
+  }
+
+  public static boolean isNotValid(int coin) {
+    return !isValid(coin);
+  }
+
   @Test
   void machineRejectsInvalidCoins() {
     assertAll(
@@ -43,9 +53,10 @@ public class CoinsTest {
         () -> assertFalse(machine.takeCoin(6)),
         () -> assertFalse(machine.takeCoin(10)),
         () -> assertFalse(machine.takeCoin(25))
-        );
+    );
   }
 
+  
   @Test
   void calculateRemainingChangeOfValidCoinsTakenByMachine() {
     machine.takeCoin(1);
@@ -79,3 +90,5 @@ public class CoinsTest {
   }
 
 }
+
+
