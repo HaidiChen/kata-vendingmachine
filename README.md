@@ -1,2 +1,2 @@
 # kata-vendingmachine
-A simple vending machine kata guided by TDD.
+A simple vending machine kata guided by first try of TDD.
