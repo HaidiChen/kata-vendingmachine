@@ -18,14 +18,6 @@ public class MachineInteractor {
     this.output = output;
   }
 
-  public void setInputPlatform(InputPlatform input) {
-    this.input = input;
-  }
-
-  public void setOutputPlatform(OutputPlatform output) {
-    this.output = output;
-  }
-
   private int moneyInMachineSoFar() {
     return machine.getRemainingChange();
   }
@@ -39,8 +31,20 @@ public class MachineInteractor {
     if (selectedRefundOption(payOrRefund)) {
       processRefund();
     }
-    else {
+    else if (paidMore(payOrRefund)){
       machineTakesTheCoin(payOrRefund);
+    }
+  }
+
+  private boolean paidMore(String payOrRefund) {
+    int paid;
+    try {
+      paid = Integer.parseInt(payOrRefund);
+      return true;
+    }
+    catch (Exception e) { // User puts invalid string otherthan "r" or numbers
+      output.printExceptionMessage(e);
+      return false;
     }
   }
 
@@ -50,7 +54,7 @@ public class MachineInteractor {
   }
 
   private boolean selectedRefundOption(String payOrRefund) {
-    return payOrRefund.equals(REFUND_OPTION);
+    return payOrRefund.equalsIgnoreCase(REFUND_OPTION);
   }
 
   private void machineTakesTheCoin(String payOrRefund) {
