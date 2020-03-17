@@ -57,7 +57,7 @@ public class MyVendingMachine implements VendingMachine {
     else if (itemStockIsEmpty()) {
       throw new StockEmpty("All " + itemName + " sold out");
     }
-    else /*(hasEnoughMoneyAndItemInStock())*/ {
+    else { // User paid enough money and item in stock
       chargeAndDecreaseStock();
       return refund();
     }
@@ -73,11 +73,6 @@ public class MyVendingMachine implements VendingMachine {
 
   private boolean itemStockIsEmpty() {
     return requestedItem.getStock() == 0;
-  }
-
-  private boolean hasEnoughMoneyAndItemInStock() {
-    return remainingChange >= requestedItem.getPrice() 
-      && requestedItem.getStock() > 0;
   }
 
   private void chargeAndDecreaseStock() {
