@@ -47,7 +47,7 @@ public class BuyCokeTest {
   @DisplayName("Coke costs 150 pence")
   @Test
   void returnChangesIfAnyAfterGettingCokeAndSetRemainingChangeToZero() 
-    throws NotEnoughMoney, StockEmpty {
+    throws NotEnoughMoney, StockEmpty, NoItemException {
     machine.takeCoin(100);
     machine.takeCoin(100);
     assertEquals(100+100-150, machine.popItem("Coke"));
@@ -70,7 +70,8 @@ public class BuyCokeTest {
   }
 
   @Test
-  void stockIsEmptyWhenSoldOut() throws NotEnoughMoney, StockEmpty {
+  void stockIsEmptyWhenSoldOut()
+    throws NotEnoughMoney, StockEmpty, NoItemException {
     machine.resetItemStock("Coke", 2);
     for (int i = 0; i < 2; i++) {
       machine.takeCoin(100);

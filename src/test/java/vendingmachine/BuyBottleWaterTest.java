@@ -46,7 +46,7 @@ public class BuyBottleWaterTest {
   @DisplayName("Bottle Water costs 100 pence")
   @Test
   void returnChangesIfAnyAfterGettingBottleWaterAndSetRemainingChangeToZero() 
-    throws NotEnoughMoney, StockEmpty {
+    throws NotEnoughMoney, StockEmpty, NoItemException {
     machine.takeCoin(100);
     machine.takeCoin(100);
     assertEquals(100+100-100, machine.popItem("BottleWater"));
@@ -70,13 +70,20 @@ public class BuyBottleWaterTest {
   }
 
   @Test
-  void stockIsEmptyWhenSoldOut() throws NotEnoughMoney, StockEmpty {
+  void stockIsEmptyWhenSoldOut() throws NotEnoughMoney, StockEmpty, NoItemException {
     machine.resetItemStock("BottleWater", 2);
     machine.takeCoin(100);
     machine.popItem("BottleWater");
     machine.takeCoin(100);
     machine.popItem("BottleWater");
     assertEquals(0, machine.getItemStock("BottleWater"));
+  }
+
+  @Test
+  void buyItemWithWrongName_WillThrowNoItemException() {
+    machine.takeCoin(20);
+    assertThrows(
+        NoItemException.class, () -> machine.popItem("nonsense"));
   }
 
 }

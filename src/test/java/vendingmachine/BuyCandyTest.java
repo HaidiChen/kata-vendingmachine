@@ -49,7 +49,7 @@ public class BuyCandyTest {
   @DisplayName("Candy costs 10 pence")
   @Test
   void returnChangesIfAnyAfterGettingCandyAndSetRemainingChangeToZero() 
-    throws NotEnoughMoney, StockEmpty {
+    throws NotEnoughMoney, StockEmpty, NoItemException {
     machine.takeCoin(20);
     assertEquals(20-10, machine.popItem("Candy"));
     assertEquals(0, machine.getRemainingChange());
@@ -70,7 +70,7 @@ public class BuyCandyTest {
   }
 
   @Test
-  void stockIsEmptyWhenSoldOut() throws NotEnoughMoney, StockEmpty {
+  void stockIsEmptyWhenSoldOut() throws NotEnoughMoney, StockEmpty, NoItemException {
     machine.resetItemStock("Candy", 2);
     for (int i = 0; i < 2; i++) {
       machine.takeCoin(20);

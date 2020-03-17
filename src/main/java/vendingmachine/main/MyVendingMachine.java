@@ -44,19 +44,27 @@ public class MyVendingMachine implements VendingMachine {
     return refundAmount;
   }
 
-  public int popItem(String itemName) throws NotEnoughMoney, StockEmpty {
+  public int popItem(String itemName) 
+      throws NotEnoughMoney, StockEmpty, NoItemException {
     requestedItem = products.getItem(itemName);
-    if (hasEnoughMoneyAndItemInStock()) {
-      chargeAndDecreaseStock();
-      return refund();
+    if (requestedItem == null) {
+      throw new NoItemException("No such item:" + itemName +  " in stock");
+    }
+    else if (notEnoughMoneyPaid()) {
+      throw new NotEnoughMoney("Not enough money, need " + 
+          moneyToBuy() + " pence more");
     }
     else if (itemStockIsEmpty()) {
       throw new StockEmpty("All " + itemName + " sold out");
     }
-    else {
-      throw new NotEnoughMoney("Not enough money, need " + 
-          moneyToBuy() + " pence more");
+    else /*(hasEnoughMoneyAndItemInStock())*/ {
+      chargeAndDecreaseStock();
+      return refund();
     }
+  }
+
+  private boolean notEnoughMoneyPaid() {
+    return remainingChange < requestedItem.getPrice();
   }
 
   private int moneyToBuy() {

@@ -91,6 +91,13 @@ public class MachineInteractor {
     catch (StockEmpty ex) {
       informUserOfItemSoldOutAndQuit(ex);
     }
+    catch (NoItemException ne) {
+      informUserOfNoSuchItemAndQuit(ne);
+    }
+  }
+
+  private void informUserOfNoSuchItemAndQuit(Exception e) {
+    output.printExceptionMessage(e);
   }
 
   private void informUserOfNextSteps(
@@ -126,7 +133,7 @@ public class MachineInteractor {
   }
 
   private void returnTheSelectedItemAndChangeIfAny(String itemName) 
-      throws NotEnoughMoney, StockEmpty {
+      throws NotEnoughMoney, StockEmpty, NoItemException {
     int change = machine.popItem(itemName);
     output.printNameOfItemPurchasedAndChange(itemName, change);
   }
