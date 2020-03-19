@@ -11,7 +11,12 @@ public class ConsoleInput implements InputPlatform {
     scanner = new Scanner(System.in);
   }
 
-  public String getStringInput() {
+  public String inputItemName() {
+    String input = scanner.nextLine();
+    return input;
+  }
+
+  public String inputMoney() {
     String input = scanner.nextLine();
     return input;
   }

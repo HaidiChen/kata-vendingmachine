@@ -3,7 +3,7 @@ package vendingmachine.interactor;
 import vendingmachine.machine.*;
 import java.util.Scanner;
 
-public class MachineInteractor {
+public class CLIInteractor {
 
   private static final String REFUND_OPTION = "r";
   private VendingMachine machine;
@@ -11,7 +11,7 @@ public class MachineInteractor {
   private InputPlatform input;
   private boolean refundRequested = false;
 
-  public MachineInteractor(
+  public CLIInteractor(
       VendingMachine machine, InputPlatform input, OutputPlatform output) {
     this.machine = machine;
     this.input = input;
@@ -24,7 +24,7 @@ public class MachineInteractor {
 
   private String askUserToPayOrQuitWithRefund() {
     output.printInstruction();
-    return input.getStringInput();
+    return input.inputMoney();
   }
 
   private void takeTheCoinOrQuitWithRefund(String payOrRefund) {
@@ -77,7 +77,7 @@ public class MachineInteractor {
   }
 
   private void askUserToSelectOneItemToBuy() {
-    String selectedItemName = input.getStringInput();
+    String selectedItemName = input.inputItemName();
     buyItem(selectedItemName, 0);
   }
 

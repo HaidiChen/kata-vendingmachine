@@ -13,11 +13,10 @@ public class Main {
     Products products = prepareItemsForMachine();
     Coins penceCoins = PenceCoins.getInstance();
     VendingMachine machine = new MyVendingMachine(penceCoins, products);
-    GUIMachine guimachine = new GUIMachine(machine);
-//
-//    OutputPlatform output = new ConsoleOutput();
-//    InputPlatform input = new ConsoleInput();
-//    MachineInteractor interactor = new MachineInteractor(machine, input, output);
+    GUIInteractor guiInteractor = new GUIInteractor(machine);
+
+//    CLIInteractor interactor = 
+//      new CLIInteractor(machine, new ConsoleInput(), new ConsoleOutput());
 //    interactor.start();
   }
 

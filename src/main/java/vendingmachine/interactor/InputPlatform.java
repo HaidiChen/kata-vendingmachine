@@ -1,6 +1,6 @@
 package vendingmachine.interactor;
 
 public interface InputPlatform {
-
-  public String getStringInput();
+  public String inputItemName();
+  public String inputMoney();
 }
