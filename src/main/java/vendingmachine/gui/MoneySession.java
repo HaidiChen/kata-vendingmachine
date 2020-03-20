@@ -7,30 +7,36 @@ import javax.swing.*;
 public class MoneySession extends JPanel {
 
   JLabel paid;
+  private GUIInteractor interactor;
+  private JTextField moneyField;
 
   public MoneySession(GUIInteractor interactor) {
-    JLabel label = new JLabel("Pay here:");
-    JTextField money = new JTextField(5);
-    money.addKeyListener(
+    this.interactor = interactor;
+    JLabel payHereLabel = new JLabel("Pay here:");
+    moneyField = new JTextField(5);
+    moneyField.addKeyListener(
       new KeyAdapter() {
         public void keyPressed(KeyEvent e) {
-          int key = e.getKeyCode();
-          if (key == KeyEvent.VK_ENTER) {
-            String payOrRefund = money.getText();
-            money.setText("");
-            interactor.pay(payOrRefund);
-          }
+          passMoneyAfterPressingEnterKey(e.getKeyCode());
         }
       }
     );
     paid = new JLabel("Paid:");
     this.setLayout(new GridLayout(2, 1));
-    this.add(label);
-    this.add(money);
+    this.add(payHereLabel);
+    this.add(moneyField);
     this.add(paid);
   }
 
-  public void setPaidLabelText(String text) {
+  private void passMoneyAfterPressingEnterKey(int keyCode) {
+    if (keyCode == KeyEvent.VK_ENTER) {
+      String payOrRefund = moneyField.getText();
+      moneyField.setText("");
+      interactor.pay(payOrRefund);
+    }
+  }
+
+  public void setText(String text) {
     paid.setText(text);
   }
 }

@@ -4,15 +4,12 @@ import java.util.Iterator;
 import vendingmachine.machine.Item;
 import java.awt.*;
 import javax.swing.*;
-import vendingmachine.interactor.OutputPlatform;
-import vendingmachine.interactor.InputPlatform;
 import vendingmachine.machine.*;
 
 public class GUIInteractor extends JFrame {
 
   private final String REFUND_OPTION = "r";
   private boolean refundRequested = false;
-  private String payOrRefund;
   JPanel topPanel;
   JLabel title;
   JPanel bottomPanel;
@@ -25,12 +22,6 @@ public class GUIInteractor extends JFrame {
 
   public GUIInteractor(VendingMachine machine) {
     this.machine = machine;
-    productsTable.setData(this.machine.getProducts());
-    productsTable = new ProductsTable();
-    choice = new ChoiceSession(this);
-    money = new MoneySession(this);
-    money.setVisible(false);
-    message = new JLabel("message goes here");
     setUpTitle();
     setUpContent();
     setUpFrameProperties();
@@ -46,19 +37,28 @@ public class GUIInteractor extends JFrame {
 
   private void setUpTitle() {
     topPanel = new JPanel();
-    title = new JLabel("My Vendign Machine");
+    title = new JLabel("My Vending Machine");
     topPanel.add(title);
   }
   
   private void setUpContent() {
     bottomPanel = new JPanel();
     bottomPanel.setBackground(Color.yellow);
+
+    productsTable.setData(this.machine.getProducts());
+    productsTable = new ProductsTable();
     JScrollPane scrollPane = new JScrollPane(productsTable);
     productsTable.setFillsViewportHeight(true);
     bottomPanel.add(scrollPane, BorderLayout.CENTER);
 
+    choice = new ChoiceSession(this);
     bottomPanel.add(choice);
+
+    money = new MoneySession(this);
+    money.setVisible(false);
     bottomPanel.add(money);
+
+    message = new JLabel();
     bottomPanel.add(message);
 
     bottomPanel.setLayout(new FlowLayout());
@@ -67,54 +67,103 @@ public class GUIInteractor extends JFrame {
     this.add(bottomPanel, BorderLayout.CENTER);
   }
 
-  public void initialPurchasing(String itemName) {
-    if (itemName == null) {
-      return;
-    }
+  public void confirmItemToPurchase(String itemName) {
     itemSelected = itemName;
+    if (haveSuchItem(itemSelected)) {
+      goToPaymentStep();
+    }
+  }
+
+  private void goToPaymentStep() {
     money.setVisible(true);
     choice.setVisible(false);
-    printInstruction();
+    message.setText("only accept 1,5,20,50 and 100 pence or 'r' to refund");
   }
 
-  public void buyItem(String itemName, int moneyPaidSoFar) {
+  private boolean haveSuchItem(String itemName) {
     try {
-      machine.takeCoin(moneyPaidSoFar);
-      int change = machine.popItem(itemName);
-      message.setText("You got yourself a " + itemName + 
-          ", and Here's your change: " + change);
-    }
-    catch (NotEnoughMoney e) {
-      message.setText(e.getMessage());
-      money.setVisible(true);
-      money.setPaidLabelText("Paid: " + machine.getRemainingChange());
-    }
-    catch (StockEmpty ex) {
-      message.setText(ex.getMessage());
+      machine.popItem(itemName);
     }
     catch (NoItemException ne) {
-      message.setText(ne.getMessage());
+      informUserOfNoSuchItem(ne);
+      return false;
+    }
+    catch (NotEnoughMoney e) {
+    }
+    catch (StockEmpty se) {
+    }
+    return true;
+  }
+
+  private void informUserOfNoSuchItem(Exception ne) {
+    message.setText(ne.getMessage());
+    choice.setText("");
+  }
+
+  public void buySelectedItem(int moneyPaidSoFar) {
+    try {
+      popPurchasedItemAndReturnChangeIfAny(moneyPaidSoFar);
+    }
+    catch (NotEnoughMoney e) {
+      informUserOfNotEnoughMoneyToBuyThisItem(e);
+      continuePurchasingOrRefund();
+    }
+    catch (StockEmpty ex) {
+    }
+    catch (NoItemException ne) {
     }
   }
 
-  public void pay(String money) {
-    this.money.setVisible(false);
+  private void continuePurchasingOrRefund() {
+    money.setVisible(true);
+    money.setText("Paid: " + machine.getRemainingChange());
+  }
+
+  private void informUserOfNotEnoughMoneyToBuyThisItem(Exception e) {
+    message.setText(e.getMessage());
+  }
+
+  private void popPurchasedItemAndReturnChangeIfAny(int moneyPaidSoFar) 
+      throws NotEnoughMoney, StockEmpty, NoItemException {
+    machine.takeCoin(moneyPaidSoFar);
+    int change = machine.popItem(itemSelected);
+    informUserOfASuccessfulPurchase(change);
+    resetChoiceAndMoneySession();
+  }
+
+  private void informUserOfASuccessfulPurchase(int change) {
+    message.setText("You got yourself a " + itemSelected + 
+        ", and Here's your change: " + change);
+  }
+
+  public void pay(String moneyPaid) {
+    money.setVisible(false);
     int paying = 0;
     try {
-      paying = Integer.parseInt(money);
+      paying = Integer.parseInt(moneyPaid);
     }
     catch (Exception e) {
-      if (money.equalsIgnoreCase(REFUND_OPTION)) {
-        message.setText("Here is your refund: " + machine.refund());
-        this.money.setPaidLabelText("");
-        choice.setVisible(true);
+      if (moneyPaid.equalsIgnoreCase(REFUND_OPTION)) {
+        processRefundAndQuitPurchasing();
         return;
       }
     }
-    buyItem(itemSelected, paying);
+    buySelectedItem(paying);
   }
 
-  private void printInstruction() {
-    message.setText("only accept 1,5,20,50 and 100 pence or 'r' to refund");
+  private void processRefundAndQuitPurchasing() {
+    informUserOfRefundHasBeenDone();
+    resetChoiceAndMoneySession();
   }
+
+  private void informUserOfRefundHasBeenDone() {
+    message.setText("Here is your refund: " + machine.refund());
+  }
+
+  private void resetChoiceAndMoneySession() {
+    money.setText("");
+    choice.setVisible(true);
+    choice.setText("");
+  }
+
 }

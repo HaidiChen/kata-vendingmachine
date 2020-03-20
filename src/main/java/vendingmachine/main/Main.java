@@ -2,8 +2,6 @@ package vendingmachine.main;
 
 import vendingmachine.coins.*;
 import vendingmachine.gui.*;
-import vendingmachine.interactor.*;
-import vendingmachine.ioplatform.*;
 import vendingmachine.machine.*;
 import vendingmachine.products.*;
 
@@ -14,10 +12,6 @@ public class Main {
     Coins penceCoins = PenceCoins.getInstance();
     VendingMachine machine = new MyVendingMachine(penceCoins, products);
     GUIInteractor guiInteractor = new GUIInteractor(machine);
-
-//    CLIInteractor interactor = 
-//      new CLIInteractor(machine, new ConsoleInput(), new ConsoleOutput());
-//    interactor.start();
   }
 
   private static Products prepareItemsForMachine() {
