@@ -38,6 +38,7 @@ public class ChoiceSession extends JPanel {
   private void passSelectedItemNameAfterPressingEnterKey(int keyCode) {
     if (keyCode == KeyEvent.VK_ENTER) {
       itemIndex = choice.getText();
+      interactor.setItemIndex(itemIndex);
       String itemName = items.get(itemIndex);
       itemName = itemName == null? "": itemName;
       interactor.confirmItemToPurchase(itemName);

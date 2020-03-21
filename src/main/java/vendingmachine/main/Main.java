@@ -16,7 +16,7 @@ public class Main {
 
   private static Products prepareItemsForMachine() {
     Products products = new OnSaleProducts();
-    products.addItem(new ItemInfo("Candy", 10, 5));
+    products.addItem(new ItemInfo("Candy", 10, 1));
     products.addItem(new ItemInfo("Snack", 50, 10));
     products.addItem(new ItemInfo("Nuts", 75, 10));
     products.addItem(new ItemInfo("Coke", 150, 10));

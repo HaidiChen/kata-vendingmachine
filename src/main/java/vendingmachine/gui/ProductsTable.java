@@ -5,11 +5,13 @@ import vendingmachine.machine.Products;
 import vendingmachine.machine.Item;
 import java.util.Iterator;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class ProductsTable extends JTable {
  
   static Object[][] data;
-  static String[] column = {"ID", "Name", "Price(Pence)"}; 
+  static String[] column = {"ID", "Name", "Stock", "Price(Pence)"}; 
+  static DefaultTableModel model;
  
   public static void setData(Products products) {
     Iterator<String> names = products.getAllItemNames();
@@ -20,9 +22,11 @@ public class ProductsTable extends JTable {
       Item item = products.getItem(name);
       data[id][0] = new Integer(id);
       data[id][1] = new String(name);
-      data[id][2] = new Integer(item.getPrice());
+      data[id][2] = new Integer(item.getStock());
+      data[id][3] = new Integer(item.getPrice());
       id++;
     }
+    model = new DefaultTableModel(data, column);
   }
 
   private static int count(Iterator<String> names) {
@@ -35,10 +39,15 @@ public class ProductsTable extends JTable {
   }
 
   public ProductsTable() {
-    super(data, column); ;
+    super(model); ;
   }  
 
   public boolean editCellAt(int row, int column, EventObject e) {
     return false;
   }
+
+  public void updateTable(int value, int row) {
+    model.setValueAt(value, row, 2);
+  }
+
 }

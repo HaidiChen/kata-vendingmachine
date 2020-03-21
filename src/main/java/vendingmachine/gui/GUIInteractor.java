@@ -5,9 +5,11 @@ import vendingmachine.machine.Item;
 import java.awt.*;
 import javax.swing.*;
 import vendingmachine.machine.*;
+import javax.swing.table.DefaultTableModel;
 
 public class GUIInteractor extends JFrame {
 
+  private int itemIndex;
   private final String REFUND_OPTION = "r";
   private boolean refundRequested = false;
   JPanel topPanel;
@@ -25,6 +27,14 @@ public class GUIInteractor extends JFrame {
     setUpTitle();
     setUpContent();
     setUpFrameProperties();
+  }
+
+  public void setItemIndex(String index) {
+    try {
+      itemIndex = Integer.parseInt(index);
+    }
+    catch (Exception e) {
+    }
   }
 
   private void setUpFrameProperties() {
@@ -109,9 +119,16 @@ public class GUIInteractor extends JFrame {
       continuePurchasingOrRefund();
     }
     catch (StockEmpty ex) {
+      informUserOfItemStockIsEmpty(ex);
+      resetChoiceAndMoneySession();
     }
     catch (NoItemException ne) {
     }
+  }
+
+  private void informUserOfItemStockIsEmpty(Exception e) {
+    message.setText(e.getMessage() +
+        ", and Here is your refund: " + machine.refund());
   }
 
   private void continuePurchasingOrRefund() {
@@ -129,6 +146,11 @@ public class GUIInteractor extends JFrame {
     int change = machine.popItem(itemSelected);
     informUserOfASuccessfulPurchase(change);
     resetChoiceAndMoneySession();
+    updateTableData();
+  }
+
+  private void updateTableData() {
+    productsTable.updateTable(machine.getItemStock(itemSelected), itemIndex);
   }
 
   private void informUserOfASuccessfulPurchase(int change) {
