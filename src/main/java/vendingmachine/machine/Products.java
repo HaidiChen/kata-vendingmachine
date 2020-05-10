@@ -3,7 +3,7 @@ package vendingmachine.machine;
 import java.util.Iterator;
 
 public interface Products {
-  public void addItem(Item item);
-  public Item getItem(String itemName);
-  public Iterator getAllItemNames();
+    public void addItem(Item item);
+    public Item getItem(String itemName);
+    public Iterator getAllItemNames();
 }

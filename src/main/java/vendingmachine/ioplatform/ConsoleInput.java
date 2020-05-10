@@ -5,19 +5,19 @@ import java.util.Scanner;
 
 public class ConsoleInput implements InputPlatform {
 
-  private Scanner scanner;
+    private Scanner scanner;
 
-  public ConsoleInput() {
-    scanner = new Scanner(System.in);
-  }
+    public ConsoleInput() {
+        scanner = new Scanner(System.in);
+    }
 
-  public String inputItemName() {
-    String input = scanner.nextLine();
-    return input;
-  }
+    public String inputItemName() {
+        String input = scanner.nextLine();
+        return input;
+    }
 
-  public String inputMoney() {
-    String input = scanner.nextLine();
-    return input;
-  }
+    public String inputMoney() {
+        String input = scanner.nextLine();
+        return input;
+    }
 }
